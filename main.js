@@ -15,35 +15,34 @@ const metascraper = require('metascraper')([
   const got = require('got')
   
   const targetUrl = 'https://arimagenomics.com/'
-  
+
+//ARRAY FOR STORING METADATA
+  var selectedData = [];
+
   ;(async () => {
     const { body: html, url } = await got(targetUrl)
     const metadata = await metascraper({ html, url })
-    console.log(metadata)
-  })()
-
+    // console.log(metadata);
+    selectedData.push(metadata.author);
+    console.log(selectedData);
 
   //Create CSV
-  const csvWriter = createCsvWriter({
-      path: '/Users/imac/Developer/metadata-scraper/output/output.csv',
-      header: [
-          {id: 'name', title: 'NAME'},
-          {id: 'lang', title: 'LANGUAGE'}
-      ]
-  });
-   
-  const records = [
-      {name: 'Bob',  lang: 'French, English'},
-      {name: 'Mary', lang: 'English'}
-  ];
-   
-  csvWriter.writeRecords(records)       // returns a promise
-      .then(() => {
-          console.log('...Done');
-      });
-   
-  // This will produce a file path/to/file.csv with following contents:
-  //
-  //   NAME,LANGUAGE
-  //   Bob,"French, English"
-  //   Mary,English
+    const csvWriter = createCsvWriter({
+        path: '/Users/imac/Developer/metadata-scraper/output/output.csv',
+        header: [
+            {id: 'author', title: 'AUTHOR'}
+        ]
+    });
+ 
+    const records = [
+        {author: (selectedData[0])}
+    ];
+ 
+    csvWriter.writeRecords(records)       // returns a promise
+        .then(() => {
+            console.log('Wrote csv');
+        });
+
+     })()
+
+  //TODO - Push metadata to csv
