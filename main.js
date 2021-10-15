@@ -23,19 +23,29 @@ const metascraper = require('metascraper')([
     const { body: html, url } = await got(targetUrl)
     const metadata = await metascraper({ html, url })
     // console.log(metadata);
-    selectedData.push(metadata.author);
+    selectedData.push(metadata.author, metadata.description, metadata.title, metadata.publisher, metadata.url);
     console.log(selectedData);
 
   //Create CSV
     const csvWriter = createCsvWriter({
         path: '/Users/imac/Developer/metadata-scraper/output/output.csv',
         header: [
-            {id: 'author', title: 'AUTHOR'}
+            {id: 'author', title: 'AUTHOR'},
+            {id: 'date', title: 'DATE'},
+            {id: 'description', title: 'DESCRIPTION'},
+            //TODO - Return image as a file
+            //TODO - Return logo as a file
+            //TDODO - What's clearbit?
+            {id: 'title', title: "TITLE"},
+            {id: 'publisher', title: "PUBLISHER"},
+            {id: 'url', title: "URL"}
         ]
     });
  
     const records = [
-        {author: (selectedData[0])}
+        {
+            author: (selectedData[0]), description: (selectedData[1]), title: (selectedData[2]), publisher: (selectedData[3]), url: (selectedData[4])
+        }
     ];
  
     csvWriter.writeRecords(records)       // returns a promise
