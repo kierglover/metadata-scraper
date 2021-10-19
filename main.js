@@ -4,7 +4,7 @@ const metascraper = require('metascraper')([
     require('metascraper-description')(),
     require('metascraper-image')(),
     require('metascraper-logo')(),
-    require('metascraper-clearbit')(),
+    require('metascraper-clearbit')({}),
     require('metascraper-publisher')(),
     require('metascraper-title')(),
     require('metascraper-url')()
@@ -23,17 +23,17 @@ const metascraper = require('metascraper')([
     const { body: html, url } = await got(targetUrl)
     const metadata = await metascraper({ html, url })
     // console.log(metadata);
-    selectedData.push(metadata.author, metadata.description, metadata.title, metadata.publisher, metadata.url);
+    selectedData.push(metadata.author, metadata.date, metadata.description, metadata.image, metadata.title, metadata.publisher, metadata.url);
     console.log(selectedData);
 
   //Create CSV
     const csvWriter = createCsvWriter({
-        path: '/Users/imac/Developer/metadata-scraper/output/output.csv',
+        path: './output/output.csv',
         header: [
             {id: 'author', title: 'AUTHOR'},
             {id: 'date', title: 'DATE'},
             {id: 'description', title: 'DESCRIPTION'},
-            //TODO - Return image as a file
+            {id: 'image', title: 'IMAGE URL'},
             //TODO - Return logo as a file
             //TDODO - What's clearbit?
             {id: 'title', title: "TITLE"},
@@ -44,7 +44,7 @@ const metascraper = require('metascraper')([
  
     const records = [
         {
-            author: (selectedData[0]), description: (selectedData[1]), title: (selectedData[2]), publisher: (selectedData[3]), url: (selectedData[4])
+            author: (selectedData[0]), date: (selectedData[1]), description: (selectedData[2]), image:(selectedData[3]), title:(selectedData[4]), publisher:(selectedData[5]), url:(selectedData[6])
         }
     ];
  
